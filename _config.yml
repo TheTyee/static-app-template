@@ -58,7 +58,8 @@ asset_bundler:
     css: yui 
   base_path: /assets/
   # When not in development mode, reference assets on the CDN site
-  server_url: http://static.apps.thetyee.ca/project-name
+  # TODO Update this to the CDN link
+  server_url: http://apps.thetyee.ca/static-template/
 assets:
   # jekyll-assets pipeline - currently using this
   # Pathname of the destination of generated (bundled) assets relative
