@@ -8,3 +8,4 @@
 //= require jquery.fullPage.js
 //= require underscore.js
 //= require backbone.js
+//= require d3.js
