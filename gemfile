@@ -7,4 +7,3 @@ gem 'yui-compressor'
 gem 'jekyll-assets'
 gem 'therubyracer'
 gem 'less'
-
