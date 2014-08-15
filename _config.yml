@@ -81,6 +81,7 @@ assets:
     - bower_components/jquery.slimscroll/
     - bower_components/fullpage.js/
     - bower_components/fullpage.js/vendors/
+    - bower_components/d3/
   js_compressor: yui
   css_compressor: yui
   cache: true
