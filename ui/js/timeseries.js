@@ -60,6 +60,9 @@ function draw(data) {
             .scale(percent_scale)
             .orient("left");
 
+        time_axis.ticks(Math.max(chart_dimensions.height/50, 2));
+        count_axis.ticks(Math.max(chart_dimensions.width/50, 2));
+
 	// Add the time axis
 	chart.append("g")
 	.attr("class", "x axis")
@@ -78,14 +81,6 @@ function draw(data) {
 	.text("GHGs")
 	.attr("x", -chart_dimensions.height/2)
 	.attr("y", -40)
-	.attr("transform", "rotate(-90)");
-	// Add the other y label
-	d3.select(".p.axis")
-	.append("text")
-	.attr("text-anchor","middle")
-	.text("Population")
-	.attr("x", -chart_dimensions.height/2)
-	.attr("y", 40)
 	.attr("transform", "rotate(-90)");
 
 	// Create lines for the values
@@ -156,35 +151,56 @@ function draw(data) {
 	// Responsive function
 	// When the window changes size, re-calcuate the scales & re-draw
 	function resize() {
-		/* Find the new window dimensions */
-		var width = parseInt(d3.select("#d3-chart").style("width")) - margins.left, 
-		height = parseInt(d3.select("#d3-chart").style("height")) - margins.bottom;
+                // Find the new window dimensions
+                width = parseInt(d3.select("#d3-chart").style("width"));
+                height = parseInt(d3.select("#d3-chart").style("height"));
 
-		/* Update the range of the scale with new width/height */
-		time_scale.range([0, width]).nice(d3.time.year);
-		percent_scale.range([height, 0]).nice();
+                // Update the container & chart dimensions
+                container_dimensions.width = width;
+                container_dimensions.height = height;
+                chart_dimensions.width = container_dimensions.width - margins.left - margins.right;
+                chart_dimensions.height = container_dimensions.height - margins.top - margins.bottom;
+                // Resize the SVG 
+                svg = d3.select("#d3-chart svg");
+                svg.attr("width", container_dimensions.width)
+                .attr("height", container_dimensions.height);
 
-		/* Update the axis with the new scale */
-		chart.select('.x.axis')
-		.attr("transform", "translate(0," + height + ")")
-		.call(time_axis);
+                // Updates the range & scales
+                time_scale = d3.time.scale()
+                    .range([0,chart_dimensions.width])
+                    .domain([low_year,high_year]);
+                percent_scale = d3.scale.linear()
+                    .range([chart_dimensions.height, 0])
+                    .domain([ghgs[0]-50,ghgs[1]+10]);
 
-		chart.select('.y.axis')
-		.call(count_axis);
+            // Setup axis
+            time_axis = d3.svg.axis()
+                .scale(time_scale);
+            count_axis = d3.svg.axis()
+                .scale(percent_scale)
+                .orient("left");
 
-		chart.selectAll('.line')
-		.datum(data)
-		.attr("d", line);
+                time_axis.ticks(Math.max(chart_dimensions.height/50, 2));
+                count_axis.ticks(Math.max(chart_dimensions.width/50, 2));
 
-		chart.selectAll('.circle')
-		.data(data)
-		.attr("cx", function(d) {return time_scale( d.year )})
-		.attr("cy", function(d) {return percent_scale( d.ghgs )});
+		// Update the axis with the new scale
+                chart.select('.x.axis')
+                .attr("transform", "translate(0," + chart_dimensions.height + ")")
+                .call(time_axis);
 
-                time_axis.ticks(Math.max(height/50, 2));
-                count_axis.ticks(Math.max(width/50, 2));
+                chart.select('.y.axis')
+                .call(count_axis);
+
+                chart.selectAll('.line')
+                .datum(data)
+                .attr("d", line);
+
+                chart.selectAll('.circle')
+                .data(data)
+                .attr("cx", function(d) {return time_scale( d.year )})
+                .attr("cy", function(d) {return percent_scale( d.ghgs )});
+
                 
-
 	}
 	d3.select(window).on('resize', resize);
 };
