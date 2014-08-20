@@ -37,7 +37,7 @@ function draw(data) {
 	csv_data = data;
 	// Get the extend of the data	
         var years = d3.extent(data, function(d) { return d.year });
-        var ghcs = d3.extent(data, function(d) { return d.ghcs });
+        var ghgs = d3.extent(data, function(d) { return d.ghgs });
 
 	// Muck with dates
 	var low_year = new Date ( years[0] );
@@ -51,7 +51,7 @@ function draw(data) {
             .domain([low_year,high_year]);
 	percent_scale = d3.scale.linear()
             .range([chart_dimensions.height, 0])
-            .domain([ghcs[0]-50,ghcs[1]+10]);
+            .domain([ghgs[0]-50,ghgs[1]+10]);
 
 	// Setup axis
 	time_axis = d3.svg.axis()
@@ -75,7 +75,7 @@ function draw(data) {
 	d3.select(".y.axis")
 	.append("text")
 	.attr("text-anchor","middle")
-	.text("GHCs")
+	.text("GHGs")
 	.attr("x", -chart_dimensions.height/2)
 	.attr("y", -40)
 	.attr("transform", "rotate(-90)");
@@ -91,7 +91,7 @@ function draw(data) {
 	// Create lines for the values
 	var line = d3.svg.line()
             .x(function(d){return time_scale(d.year)})
-            .y(function(d){return percent_scale(d.ghcs)})
+            .y(function(d){return percent_scale(d.ghgs)})
             .interpolate("linear");	
 
 	// Add a group for the lines
@@ -99,7 +99,7 @@ function draw(data) {
 	.append("g")
 	g.append("path")
 	.attr("class", "line")
-	.attr("id", "ghcs")
+	.attr("id", "ghgs")
 	.attr("d", line(data));
 
 	var g = d3.select("#chart")
@@ -110,7 +110,7 @@ function draw(data) {
             .enter()
             .append("circle")
                 .attr("cx", function(d) {return time_scale( d.year )})
-                .attr("cy", function(d) {return percent_scale( d.ghcs )})
+                .attr("cy", function(d) {return percent_scale( d.ghgs )})
                 .attr("r",0)
                 .attr("class", "circle");
 
@@ -135,18 +135,18 @@ function draw(data) {
 
 	g.selectAll("circle")
 	.on("mouseover.tooltip", function(d){
-		d3.select("text#ghcs").remove();
+		d3.select("text#ghgs").remove();
 		d3.select("#chart")
 		.append("text")
-		.text(d.ghcs + "TK")
+		.text(d.ghgs + "TK")
 		.attr("x", time_scale(d.year) + 15)
-		.attr("y", percent_scale(d.ghcs) - 15)
-		.attr("id", "ghcs");
+		.attr("y", percent_scale(d.ghgs) - 15)
+		.attr("id", "ghgs");
 
 	});
 	g.selectAll("circle")
 	.on("mouseout.tooltip", function(d){
-		d3.select("text#ghcs")
+		d3.select("text#ghgs")
 		.transition()
 		.duration(500)
 		.style("opacity",0)
@@ -179,7 +179,7 @@ function draw(data) {
 		chart.selectAll('.circle')
 		.data(data)
 		.attr("cx", function(d) {return time_scale( d.year )})
-		.attr("cy", function(d) {return percent_scale( d.ghcs )});
+		.attr("cy", function(d) {return percent_scale( d.ghgs )});
 
                 time_axis.ticks(Math.max(height/50, 2));
                 count_axis.ticks(Math.max(width/50, 2));
@@ -193,7 +193,7 @@ function draw(data) {
 d3.csv("/data/data.csv", function(d) {
 	return {
 		year: new Date(+d.Year, 0, 1), // convert "Year" column to Date
-		ghcs: +d.GHCs,
+		ghgs: +d.GHGs,
 		pop: +d.Population,
 		kyoto: +d.Kyoto
 	};
