@@ -1,0 +1,6 @@
+////////////////////////////////////////////
+// Slide - Map - Regional comparison
+// This is just an example to start from
+// when developing new timeseries charts
+// in this project
+///////////////////////////////////////////
