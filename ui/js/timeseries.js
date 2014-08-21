@@ -8,8 +8,8 @@ var csv_data;
 
 // Find the window dimensions
 var margins = {top: 10, right: 80, bottom: 60, left: 60};
-var width = parseInt(d3.select("#d3-chart").style("width"));
-height = parseInt(d3.select("#d3-chart").style("height"));
+var width = parseInt(d3.select("#datavis").style("width"));
+height = parseInt(d3.select("#datavis").style("height"));
 
 // Setup container & chart dimensions
 var container_dimensions = {width: width, height: height},
@@ -19,7 +19,7 @@ chart_dimensions = {
 };
 
 // Setup SVG
-var chart = d3.select("#d3-chart")
+var chart = d3.select("#datavis")
     .append("svg")
         .attr("width", container_dimensions.width)
         .attr("height", container_dimensions.height)
@@ -152,8 +152,8 @@ function draw(data) {
 	// When the window changes size, re-calcuate the scales & re-draw
 	function resize() {
                 // Find the new window dimensions
-                width = parseInt(d3.select("#d3-chart").style("width"));
-                height = parseInt(d3.select("#d3-chart").style("height"));
+                width = parseInt(d3.select("#datavis").style("width"));
+                height = parseInt(d3.select("#datavis").style("height"));
 
                 // Update the container & chart dimensions
                 container_dimensions.width = width;
@@ -161,7 +161,7 @@ function draw(data) {
                 chart_dimensions.width = container_dimensions.width - margins.left - margins.right;
                 chart_dimensions.height = container_dimensions.height - margins.top - margins.bottom;
                 // Resize the SVG 
-                svg = d3.select("#d3-chart svg");
+                svg = d3.select("#datavis svg");
                 svg.attr("width", container_dimensions.width)
                 .attr("height", container_dimensions.height);
 
